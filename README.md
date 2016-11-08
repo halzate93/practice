@@ -25,44 +25,76 @@ A test response should be done through a pull request.
 ![Example Folder Structure](http://i.imgur.com/Dbcdfg7.png =200x)
 
 ------------------------------------------------------
-
 1. Which data structure would be more suitable for this scenario and why?, write a short code that shows how it would be used for the methods *PlaceOrder (Order o)* and *AttendNext ()*:
 
   "I have a hot-dog game where the clients place their orders one by one and I have to serve them in the order they place    their orders, in other words the first client to place an order should be the first served."
+  
+  Answer:
+  
+  For this type of game where it's required that the first to enter, be the first to come out, i robaly use Queue data structure.
+  
+  Example code:
+  
+```c#
+using UnityEngine;
+using System.Collections;
+
+public class Question1 : MonoBehaviour
+{
+    private float timeToNewClient;
+    private float timeToNewClientTemp;
+    private Queue clientsList;
+    private GameObject[] clients = new GameObject[5];
+
+    void Start()
+    {
+        timeToNewClientTemp = timeToNewClient;
+    }
+
+    void Update()
+    {
+        int clientCount = clients.Length - 1;
+
+        timeToNewClient -= Time.deltaTime;
+
+        if (timeToNewClient <= 0)
+        {
+            clientCount--;
+            clientsList.Enqueue(clients[clientCount]);
+
+            timeToNewClient = timeToNewClientTemp;
+        }
+    }
+
+    private void OrderReady()
+    {
+        clientsList.Dequeue();
+    }
+}
+```
 
 2. How do dictionaries work?, how fast is it to search for an element in a dictionary?. How does hashing have anything to do with it?
 
 3. How would you enhance the performance of the following code using data structures?
 
-  ```c#
-  public class Character
-  {
-    public string greeting;
-    public string name;
-  }
+```c#
+public class Character
+{
+  public string greeting;
+  public string name;
+}
 
-  public class Greeter
+public class Greeter
+{
+  private List<Character> characters;
+  
+  public void Greet (string name)
   {
-    private List<Character> characters;
-
-    public void Greet (string name)
+    foreach (Character c in characters)
     {
-      foreach (Character c in characters)
-      {
-        if (c.name == name)
-           Debug.Log (c.greeting);
-      }
+      if (c.name == name)
+         Debug.Log (c.greeting);
     }
   }
-  ```
-4. What is a State Machine?, make a diagram with an example of how they work.
-
-5. What is a Behaviour Tree?, make an example of how they work.
-
-6. Using the free [behaviour plugin](https://www.assetstore.unity3d.com/en/#!/content/20280) we reviewed in class, make a simple guard that moves through waypoints patrolling.
-
-7. What are the core steps of the minimax algorithm for decision making?, make a pseudocode.
-
-8. Using Unity's navmesh move a simple agent to wherever the user clicks.
-
-
+}
+```
